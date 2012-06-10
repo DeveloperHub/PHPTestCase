@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+	backupStaticAttributes="false"
+	bootstrap="./tests/TestCase.php"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true">
+
+	<testsuites>
+		<testsuite name="Ukazkovy test">
+			<directory>./tests/case</directory>
+		</testsuite>
+	</testsuites>
+
+	<!--
+	<logging>
+		<log type="coverage-html" target="./tests/coverage/report" title="Nazev Vaseho projektu"
+			 charset="UTF-8" yui="true" highlight="true"
+			 lowUpperBound="35" highLowerBound="70"/>
+	</logging>
+	-->
+
+	<!--
+	<listeners>
+			<listener class="Application_Test_TestTimesListener" 
+							file="./libs/PHPTestCase/framework/PHPUnit/Listeners/TestTimesLimitListener.php">
+			</listener>
+	</listeners>
+	-->
+</phpunit>
