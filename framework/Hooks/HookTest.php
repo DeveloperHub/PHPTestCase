@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteTestCase\Framework;
+namespace PHPTestCase\Framework;
 
 
 /**
@@ -29,7 +29,7 @@ final class HookTest
 	 * Cesta k binarce php
 	 * @author RDPanek
 	 */
-	private $phpPath = "php";
+	private $phpPath = NULL;
 
 	/**
 	 * Nastaveni PHPunit pro prikazovou radku
@@ -124,20 +124,9 @@ final class HookTest
 	private function catchAnyErrors( $output = NULL )
 	{
 		$i = 0;
-		// doslo k nejake zmene statusu nejakeho issues na Githubu?
+		
 		foreach( $output as $val )
 		{
-
-			/************ Zachytavani udalosti pro Github *************/
-			$pattern_github = '/^Updating GitHub.+/';
-			preg_match($pattern_github, $val, $matches_github, PREG_OFFSET_CAPTURE);
-			
-			if( count($matches_github) )
-			{
-				echo '>> ' . $matches_github[0][0] . $this->setLine();
-			}
-
-
 
 			/*********** Zachytavani chyb ****************************/
 			$pattern_github = '/.+\).+/';

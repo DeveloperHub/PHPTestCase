@@ -38,13 +38,16 @@ Spousteni integracnich a jednotkovych testu
 	* s parametrem --group unit pouze unit testy
 * pokud pouzivate pre-commit, automaticky se spousteji testy pouze ve skupine unit
 
-Spousteni integracnich a unit testu pred commitem
-=================================================
-* pre-commit prekopirujte z /PHPTestCase/framework/Hooks/pre-commit/ do
-  /VasProjekt/.git/hooks/pre-commit
-* spustte git commit - spusti se testy a pokud vporadku probehnou, bude se pokracovat v commitovani
-* spusteni testu muzete v pre-commit i ovlivnit
 
+Spousteni testu pred provedenim prikazu git commit
+==================================================
+* prekopirujte z libs/PHPTestCase/framework/Hooks/pre-commit do .git/hooks/
+* muzete nsatavit urcitou skupinu testu, ktera se ma spoustet pri commitu
+* muzete nastavit cestu k PHP
+* git commit 
+	* spusti PHPUnit na testech
+	* pri uspesnem probehnuti testu se provede git commit
+	* pri neuspesnem probehnuti testu se git commit neprovede
 
 Poznamky k nastaveni phpunit.xml
 ================================
