@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Phptestcase by DeveloperHub</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Phptestcase</h1>
+        <p>Testovací případ (Test Case) – Testovací případ je mnoţina podmínek či proměnných, ze kterých tester zjišťuje, zdali aplikace pracuje správně. Testovací případy jsou obvykle skládány do testovacích sad.</p>
+        <p class="view"><a href="https://github.com/DeveloperHub/PHPTestCase">View the Project on GitHub <small>DeveloperHub/PHPTestCase</small></a></p>
+        <ul>
+          <li><a href="https://github.com/DeveloperHub/PHPTestCase/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/DeveloperHub/PHPTestCase/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/DeveloperHub/PHPTestCase">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>Vytvořeno v { DeveloperHub</p>
+
+<h1>PHPTestCase</h1>
+
+<ul>
+<li>sada nastroju pro testovani aplikaci v PHP</li>
+<li>doporucuji PHPTestCase pouzit jako submodul</li>
+</ul><h2>Instalace PHPTestCase</h2>
+
+<ul>
+<li>naklonovani externiho repozitare
+$ git submodule add <a href="http://github.com/DeveloperHub/PHPTestCase.git">http://github.com/DeveloperHub/PHPTestCase.git</a> libs/PHPTestCase</li>
+<li>v rootu projektu se vytvori sobor .gitmodules, ktery predstavuje konfiguracni soubor, v nemz je ulozeno mapovani
+mezi adresou URL projektu a lokalnim podadresarem PHPTestCase</li>
+<li>hostujici projekt je nyni povysen na "super projekt"</li>
+<li>pri klonovani je sice ziskan .gitmodules, ale ne jeho data, je potreba je stahnout
+
+<ul>
+<li>$ git submodule init = inicializace lokalniho konfiguracniho souboru</li>
+<li>$ git submodule update = vyzvednuti vsech dat</li>
+</ul>
+</li>
+<li>ve skeletonu v adresarich unit a selen jsou v souborech readme pripraveny ukazkove tridy testu</li>
+</ul><h1>Nastaveni</h1>
+
+<ul>
+<li>obsah adresare skeleton/ prekopirujte do rootu Vasi aplikace</li>
+<li>ziskate 
+
+<ul>
+<li>phpunit.xml - konfigurace phpunit</li>
+<li>tests/ 
+
+<ul>
+<li>case/ 
+
+<ul>
+<li>selen/ - adresar pro selen testy</li>
+<li>unit/ - adresar pro integracni a jednotkove testy</li>
+</ul>
+</li>
+<li>coverage/ - adresar pro coverage report</li>
+<li>libs/ - adresar pro tridy tretich stran, nebo jejich uzpusobeni, nebo Vase, ktere vyuzijete jen v testech</li>
+<li>run.php - spoustec NetteTestCase a PHPUnit frameworku</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><h1>Spousteni integracnich a jednotkovych testu</h1>
+
+<ul>
+<li>$ php tests/run.php
+
+<ul>
+<li>bez parametru se spusti vsechny testy</li>
+<li>s parametrem --group unit pouze unit testy</li>
+</ul>
+</li>
+<li>pokud pouzivate pre-commit, automaticky se spousteji testy pouze ve skupine unit</li>
+</ul><h1>Spousteni testu pred provedenim prikazu git commit</h1>
+
+<ul>
+<li>prekopirujte z libs/PHPTestCase/framework/Hooks/pre-commit do .git/hooks/</li>
+<li>muzete nsatavit urcitou skupinu testu, ktera se ma spoustet pri commitu</li>
+<li>muzete nastavit cestu k PHP</li>
+<li>git commit 
+
+<ul>
+<li>spusti PHPUnit na testech</li>
+<li>pri uspesnem probehnuti testu se provede git commit</li>
+<li>pri neuspesnem probehnuti testu se git commit neprovede</li>
+</ul>
+</li>
+</ul><h1>Poznamky k nastaveni phpunit.xml</h1>
+
+<ul>
+<li>listeners
+
+<ul>
+<li>Application_Test_TestTimeListener - po odkomentovani hlida max. 2s delku behu jednoho testu</li>
+</ul>
+</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/DeveloperHub">DeveloperHub</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-31913510-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
