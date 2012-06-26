@@ -1,2 +1,2 @@
-#pre-commit
+#!/bin/sh
 php .git/hooks/pre-commit.php

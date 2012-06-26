@@ -19,13 +19,6 @@ final class HookTest
 	private $status = NULL;
 
 	/**
-	 * Nazev projektu
-	 * @author RDPanek
-	 * basename( getcwd() )
-	 */
-	private $projectName = "";
-
-	/**
 	 * Cesta k binarce php
 	 * @author RDPanek
 	 */
@@ -158,7 +151,7 @@ final class HookTest
 	{
 		if( $this->status === NULL )
 		{
-			echo '>> Vsechny testy pro ' . $this->projectName . ' prosly v poradku. ' 
+			echo '>> Vsechny testy pro ' . basename( getcwd() ) . ' prosly v poradku. ' 
 					. $this->setLine();
 			
 			echo '----- Provadena operace v Gitu nyni pokracuje. -----' 
