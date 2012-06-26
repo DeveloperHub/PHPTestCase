@@ -11,5 +11,4 @@ include("./libs/PHPTestCase/framework/Hooks/HookTest.php");
  */
 $hk = new PHPTestCase\Framework\HookTest;
 $hk->setOptions("--group unit");
-$hk->setPath("php38");
 $hk->run();
