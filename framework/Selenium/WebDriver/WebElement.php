@@ -15,6 +15,18 @@ class WebDriver_WebElement {
     return $this->driver->execute($http_type, "/session/:sessionId/element/" . $this->element_id . $relative_url, $payload);
   }
   
+  public function get_driver() {
+    return $this->driver;
+  }
+  
+  public function get_element_id() {
+    return $this->element_id;
+  }
+  
+  public function get_locator() {
+    return $this->locator;
+  }
+  
   /********************************************************************
    * Getters
    */
@@ -99,6 +111,12 @@ class WebDriver_WebElement {
     return WebDriver::GetJSONValue($response);
   }
   
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/location_in_view
+  public function get_location_in_view() {
+    $response = $this->execute("GET", "/location_in_view");
+    return WebDriver::GetJSONValue($response);
+  }
+  
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/size
   public function get_size() {
     $response = $this->execute("GET", "/size");
@@ -131,6 +149,16 @@ class WebDriver_WebElement {
         return $option;
       }
     }
+  }
+  
+  public function get_all_selected() {
+    $selected = array();
+    foreach ($this->get_options() as $option) {
+      if ($option->is_selected()) {
+        $selected[] = $option;
+      }
+    }
+    return $selected;
   }
   
   // 1-based index
@@ -245,11 +273,19 @@ class WebDriver_WebElement {
    */
 
   public function assert_visible() {
-    PHPUnit_Framework_Assert::assertTrue($this->is_visible(), "Failed asserting that <{$this->locator}> is visible.");
+    $end_time = time() + WebDriver::$ImplicitWaitMS/1000;
+    do {
+      $visible = $this->is_visible();
+    } while (time() < $end_time && !$visible);
+    PHPUnit_Framework_Assert::assertTrue($visible, "Failed asserting that <{$this->locator}> is visible.");
   }
   
   public function assert_hidden() {
-    PHPUnit_Framework_Assert::assertFalse($this->is_visible(), "Failed asserting that <{$this->locator}> is hidden.");
+    $end_time = time() + WebDriver::$ImplicitWaitMS/1000;
+    do {
+      $hidden = !$this->is_visible();
+    } while (time() < $end_time && !$hidden);
+    PHPUnit_Framework_Assert::assertTrue($hidden, "Failed asserting that <{$this->locator}> is hidden.");
   }
 
   public function assert_enabled() {
@@ -334,6 +370,11 @@ class WebDriver_WebElement {
   public function assert_option_count($expected_count) {
     $options = $this->get_options();
     PHPUnit_Framework_Assert::assertEquals($expected_count, count($options), "Failed asserting that <{$this->locator}> contains $expected_count options.");
+  }
+  
+  public function assert_selected_count($expected_count) {
+    $selected = $this->get_all_selected();
+    PHPUnit_Framework_Assert::assertEquals($expected_count, count($selected), "Failed asserting that <{$this->locator}> contains $expected_count selected options.");
   }
   
   public function assert_contains_label($expected_label) {

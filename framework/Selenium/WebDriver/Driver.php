@@ -60,7 +60,7 @@ class WebDriver_Driver {
     if ($version) {
       $capabilities["version"] = $version;
     }
-    return new \WebDriver_Driver("http://" . $sauce_username . ":" . $sauce_key . "@ondemand.saucelabs.com:80/wd/hub", $capabilities);
+    return new WebDriver_Driver("http://" . $sauce_username . ":" . $sauce_key . "@ondemand.saucelabs.com:80/wd/hub", $capabilities);
   }
   
   public static function InitAtHost($host, $port, $browser, $additional_options = array()) {
@@ -69,9 +69,9 @@ class WebDriver_Driver {
       'browserName' => $browser,
     ), $additional_options);
     if (strcasecmp($browser, "iphone") == 0 || strcasecmp($browser, "android") == 0) {
-      return new \WebDriver_Driver("http://$host:$port/hub", $capabilities);
+      return new WebDriver_Driver("http://$host:$port/hub", $capabilities);
     } else {
-      return new \WebDriver_Driver("http://$host:$port/wd/hub", $capabilities);
+      return new WebDriver_Driver("http://$host:$port/wd/hub", $capabilities);
     }
   }
   
@@ -97,7 +97,7 @@ class WebDriver_Driver {
     }
     $relative_url = str_replace(':sessionId', $this->session_id, $relative_url);
     $full_url = $this->server_url . $relative_url;
-    $response = \WebDriver::Curl($http_type, $full_url, $payload);
+    $response = WebDriver::Curl($http_type, $full_url, $payload);
     if (isset($response['body'])) {
       $command_info = $http_type . " - " . $full_url . " - " . print_r($payload, true);
       $this->check_response_status($response['body'], $command_info);
@@ -112,7 +112,7 @@ class WebDriver_Driver {
       PHPUnit_Framework_Assert::assertArrayHasKey($response_status_code, self::$status_codes, "Unknown status code $response_status_code returned from server.\n$body");
       $response_info = $response_status_code . " - " . self::$status_codes[$response_status_code][0] . " - " . self::$status_codes[$response_status_code][1];
       $additional_info = isset($array['value']['message']) ? "Message: " . $array['value']['message'] : "Response: " . $body;
-      PHPUnit_Framework_Assert::assertEquals(0, $response_status_code, "Unsuccessful \WebDriver command: $response_info\nCommand: $command_info\n$additional_info");
+      PHPUnit_Framework_Assert::assertEquals(0, $response_status_code, "Unsuccessful WebDriver command: $response_info\nCommand: $command_info\n$additional_info");
     }
   }
   
@@ -125,28 +125,40 @@ class WebDriver_Driver {
    * Getters
    */
   
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/status
+  public function get_server_status() {
+    $response = $this->execute("GET", "/status");
+    return WebDriver::GetJSONValue($response);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
+  public function get_all_sessions() {
+    $response = $this->execute("GET", "/sessions");
+    return WebDriver::GetJSONValue($response);
+  }
+  
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
   public function get_capabilities() {
     $response = $this->execute("GET", "/session/:sessionId");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
 
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/url
   public function get_url() {
     $response = $this->execute("GET", "/session/:sessionId/url");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/title
   public function get_title() {
     $response = $this->execute("GET", "/session/:sessionId/title");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/source
   public function get_source() {
     $response = $this->execute("GET", "/session/:sessionId/source");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
   
   public function get_text() {
@@ -156,7 +168,7 @@ class WebDriver_Driver {
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/screenshot
   public function get_screenshot() {
     $response = $this->execute("GET", "/session/:sessionId/screenshot");
-    $base64_encoded_png = \WebDriver::GetJSONValue($response);
+    $base64_encoded_png = WebDriver::GetJSONValue($response);
     return base64_decode($base64_encoded_png);
   }
   
@@ -164,32 +176,32 @@ class WebDriver_Driver {
   // Not supported as of Selenium 2.0b3
   public function get_all_ime_engines() {
     $response = $this->execute("GET", "/session/:sessionId/ime/available_engines");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/ime/active_engine
   // Not supported as of Selenium 2.0b3
   public function get_ime_engine() {
     $response = $this->execute("GET", "/session/:sessionId/ime/active_engine");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/ime/activated
   // Not supported as of Selenium 2.0b3
   public function is_ime_active() {
     $response = $this->execute("GET", "/session/:sessionId/ime/activated");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element
   public function get_element($locator) {
-    $payload = \WebDriver::ParseLocator($locator);
+    $payload = WebDriver::ParseLocator($locator);
     $response = $this->execute("POST", "/session/:sessionId/element", $payload);
-    $element_id = \WebDriver::GetJSONValue($response, "ELEMENT");
-    return new \WebDriver_WebElement($this, $element_id, $locator);
+    $element_id = WebDriver::GetJSONValue($response, "ELEMENT");
+    return new WebDriver_WebElement($this, $element_id, $locator);
   }
   
-  // \WebDriver can do implicit waits for AJAX elements, but sometimes you need explicit reloads
+  // WebDriver can do implicit waits for AJAX elements, but sometimes you need explicit reloads
   // Note: is_element_present() will use the wait time, if any, that you've set with set_implicit_wait()
   public function get_element_reload($locator, $max_wait_minutes = 2) {
     $start_time = time();
@@ -202,12 +214,12 @@ class WebDriver_Driver {
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/elements
   public function get_all_elements($locator) {
-    $payload = \WebDriver::ParseLocator($locator);
+    $payload = WebDriver::ParseLocator($locator);
     $response = $this->execute("POST", "/session/:sessionId/elements", $payload);
-    $element_ids = \WebDriver::GetJSONValue($response, "ELEMENT");
+    $element_ids = WebDriver::GetJSONValue($response, "ELEMENT");
     $elements = array();
     foreach ($element_ids as $element_id) {
-      $elements[] = new \WebDriver_WebElement($this, $element_id, $locator);
+      $elements[] = new WebDriver_WebElement($this, $element_id, $locator);
     }
     return $elements;
   }
@@ -215,8 +227,8 @@ class WebDriver_Driver {
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/active
   public function get_active_element() {
     $response = $this->execute("POST", "/session/:sessionId/element/active");
-    $element_id = \WebDriver::GetJSONValue($response, "ELEMENT");
-    return new \WebDriver_WebElement($this, $element_id, "active=true");
+    $element_id = WebDriver::GetJSONValue($response, "ELEMENT");
+    return new WebDriver_WebElement($this, $element_id, "active=true");
   }
   
   public function is_element_present($locator) {
@@ -232,26 +244,38 @@ class WebDriver_Driver {
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window_handle
   public function get_window_handle() {
     $response = $this->execute("GET", "/session/:sessionId/window_handle");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window_handles
   public function get_all_window_handles() {
     $response = $this->execute("GET", "/session/:sessionId/window_handles");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/size
+  public function get_window_size($window_handle = "current") {
+    $response = $this->execute("GET", "/session/:sessionId/window/{$window_handle}/size");
+    return WebDriver::GetJSONValue($response);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/position
+  public function get_window_position($window_handle = "current") {
+    $response = $this->execute("GET", "/session/:sessionId/window/{$window_handle}/position");
+    return WebDriver::GetJSONValue($response);
   }
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/speed
   // Not supported as of Selenium 2.0b3
   public function get_input_speed() {
     $response = $this->execute("GET", "/session/:sessionId/speed");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
   public function get_all_cookies() {
     $response = $this->execute("GET", "/session/:sessionId/cookie");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
   
   public function get_cookie($name, $property = null) {
@@ -271,7 +295,7 @@ class WebDriver_Driver {
   // Not supported in iPhone as of Selenium 2.0b3
   private function get_orientation() {
     $response = $this->execute("GET", "/session/:sessionId/orientation");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
   public function is_landscape()  { return $this->get_orientation() == "LANDSCAPE"; }
   public function is_portrait()   { return $this->get_orientation() == "PORTRAIT"; }
@@ -279,12 +303,20 @@ class WebDriver_Driver {
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/alert_text
   public function get_alert_text() {
     $response = $this->execute("GET", "/session/:sessionId/alert_text");
-    return \WebDriver::GetJSONValue($response);
+    return WebDriver::GetJSONValue($response);
   }
 
   /********************************************************************
    * Setters
    */
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/timeouts
+  public function set_timeout($timeout_type, $milliseconds) {
+    $acceptable_timeout_types = array("script", "implicit", "page load");
+    PHPUnit_Framework_Assert::assertTrue(in_array($timeout_type, $acceptable_timeout_types), "First argument must be one of: " . implode(", ", $acceptable_timeout_types));
+    $payload = array("type" => $timeout_type, "ms" => $milliseconds);
+    $this->execute("POST", "/session/:sessionId/timeouts", $payload);
+  }
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/timeouts/async_script
   public function set_async_timeout($milliseconds) {
@@ -294,7 +326,7 @@ class WebDriver_Driver {
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/timeouts/implicit_wait
   public function set_implicit_wait($milliseconds) {
-    \WebDriver::$ImplicitWaitMS = $milliseconds;
+    WebDriver::$ImplicitWaitMS = $milliseconds;
     $payload = array("ms" => $milliseconds);
     $this->execute("POST", "/session/:sessionId/timeouts/implicit_wait", $payload);
   }
@@ -325,7 +357,7 @@ class WebDriver_Driver {
   // Example: $driver->select_window("My Cool Page", "#chapter7") finds the window called "My Cool Page#chapter7" or "My Cool Page" in IE, and "My Cool Page" in all other browsers
   public function select_window($window_title, $ie_hash = '') {
     $start_time = time();
-    $end_time = $start_time + \WebDriver::$ImplicitWaitMS/1000;
+    $end_time = $start_time + WebDriver::$ImplicitWaitMS/1000;
     $all_window_handles = $this->get_all_window_handles();
     $all_titles = array();
     $found_window = false;
@@ -349,10 +381,27 @@ class WebDriver_Driver {
     $this->execute("DELETE", "/session/:sessionId/window");
   }
   
-  public function maximize_window() {
-    $this->execute_js_sync("window.moveTo(0,0)");
-    $this->execute_js_sync("window.resizeTo(screen.width,screen.height)");
-    $this->execute_js_sync("window.focus()");
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/size
+  public function set_window_size($new_width, $new_height, $window_handle = "current") {
+    $payload = array(
+      "width" => $new_width,
+      "height" => $new_height
+    );
+    $this->execute("POST", "/session/:sessionId/window/{$window_handle}/size", $payload);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/position
+  public function set_window_position($new_x, $new_y, $window_handle = "current") {
+    $payload = array(
+      "x" => $new_x,
+      "y" => $new_y
+    );
+    $this->execute("POST", "/session/:sessionId/window/{$window_handle}/position", $payload);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/maximize
+  public function maximize_window($window_handle = "current") {
+    $this->execute("POST", "/session/:sessionId/window/{$window_handle}/maximize");
   }
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/ime/deactivate
@@ -432,6 +481,12 @@ class WebDriver_Driver {
     $this->execute("POST", "/session/:sessionId/speed", $payload);
   }
   
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/keys
+  public function send_keys($keys) {
+    $payload = array("value" => preg_split('//u', $keys, -1, PREG_SPLIT_NO_EMPTY));
+    $this->execute("POST", "/session/:sessionId/keys", $payload);
+  }
+  
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/modifier
   private function send_modifier($modifier_code, $is_down) {
     $payload = array(
@@ -493,7 +548,7 @@ class WebDriver_Driver {
   
   // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/alert_text
   public function type_alert($text) {
-    $payload = array("keysToSend" => $text);
+    $payload = array("text" => $text);
     $this->execute("POST", "/session/:sessionId/alert_text", $payload);
   }
   
@@ -591,12 +646,102 @@ class WebDriver_Driver {
     $this->execute("POST", "/session/:sessionId/touch/flick", $payload);
   }
   
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
+  public function get_geographical_location() {
+    $response = $this->execute("GET", "/session/:sessionId/location");
+    return WebDriver::GetJSONValue($response);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
+  public function set_geographical_location($new_latitude, $new_longitude, $new_altitude) {
+    $payload = array(
+      'latitude' => $new_latitude,
+      'longitude' => $new_longitude,
+      'altitude' => $new_altitude
+    );
+    $this->execute("POST", "/session/:sessionId/location", $payload);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/local_storage
+  public function get_all_local_storage_keys() {
+    $response = $this->execute("GET", "/session/:sessionId/local_storage");
+    return WebDriver::GetJSONValue($response);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/local_storage
+  public function set_local_storage_item($key, $new_value) {
+    $payload = array(
+      'key' => $key,
+      'value' => $new_value
+    );
+    $this->execute("POST", "/session/:sessionId/local_storage", $payload);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/local_storage
+  public function delete_all_local_storage() {
+    $this->execute("DELETE", "/session/:sessionId/local_storage");
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/local_storage/key/:key
+  public function get_local_storage_item($key) {
+    $response = $this->execute("GET", "/session/:sessionId/local_storage/key/{$key}");
+    return WebDriver::GetJSONValue($response);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/local_storage/key/:key
+  public function delete_local_storage_item($key) {
+    $this->execute("DELETE", "/session/:sessionId/local_storage/key/{$key}");
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/local_storage/size
+  public function get_local_storage_count() {
+    $response = $this->execute("GET", "/session/:sessionId/local_storage/size");
+    return WebDriver::GetJSONValue($response);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/session_storage
+  public function get_all_session_storage_keys() {
+    $response = $this->execute("GET", "/session/:sessionId/session_storage");
+    return WebDriver::GetJSONValue($response);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/session_storage
+  public function set_session_storage_item($key, $new_value) {
+    $payload = array(
+      'key' => $key,
+      'value' => $new_value
+    );
+    $this->execute("POST", "/session/:sessionId/session_storage", $payload);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/session_storage
+  public function delete_all_session_storage() {
+    $this->execute("DELETE", "/session/:sessionId/session_storage");
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/session_storage/key/:key
+  public function get_session_storage_item($key) {
+    $response = $this->execute("GET", "/session/:sessionId/session_storage/key/{$key}");
+    return WebDriver::GetJSONValue($response);
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/session_storage/key/:key
+  public function delete_session_storage_item($key) {
+    $this->execute("DELETE", "/session/:sessionId/session_straoge/key/{$key}");
+  }
+  
+  // See http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/session_storage/size
+  public function get_session_storage_count() {
+    $response = $this->execute("GET", "/session/:sessionId/session_storage/size");
+    return WebDriver::GetJSONValue($response);
+  }
+  
   // See https://saucelabs.com/docs/sauce-ondemand#alternative-annotation-methods
   public function set_sauce_context($field, $value) {
     if ($this->running_at_sauce()) {
       $payload = json_encode(array($field => $value));
       $url_parts = parse_url($this->server_url);
-      \WebDriver::Curl("PUT", "http://" . $url_parts['user'] . ":" . $url_parts['pass'] . "@saucelabs.com/rest/v1/" . $url_parts['user'] . "/jobs/" . $this->session_id, $payload);
+      WebDriver::Curl("PUT", "http://" . $url_parts['user'] . ":" . $url_parts['pass'] . "@saucelabs.com/rest/v1/" . $url_parts['user'] . "/jobs/" . $this->session_id, $payload);
     }
   }
   
@@ -610,10 +755,10 @@ class WebDriver_Driver {
   
   // IE appends the anchor tag to the window title, but only when it's done loading
   // Example: $driver->assert_title("My Cool Page", "#chapter7") asserts that the page title is "My Cool Page#chapter7" in IE, and "My Cool Page" in all other browsers
-  // \WebDriver does not wait for the page to finish loading before returning the title, so we check repeatedly
+  // WebDriver does not wait for the page to finish loading before returning the title, so we check repeatedly
   public function assert_title($expected_title, $ie_hash = '') {
     $start_time = time();
-    $end_time = $start_time + \WebDriver::$ImplicitWaitMS/1000;
+    $end_time = $start_time + WebDriver::$ImplicitWaitMS/1000;
     $title_matched = false;
     do {
       $actual_title = $this->get_title();
@@ -628,6 +773,10 @@ class WebDriver_Driver {
   
   public function assert_element_not_present($element_locator) {
     PHPUnit_Framework_Assert::assertFalse($this->is_element_present($element_locator), "Failed asserting that <$element_locator> is not present");
+  }
+  
+  public function assert_element_count($locator, $expected_count) {
+    PHPUnit_Framework_Assert::assertEquals($expected_count, count($this->get_all_elements($locator)), "Failed asserting that <$locator> appears $expected_count times.");
   }
   
   public function assert_string_present($expected_string) {
