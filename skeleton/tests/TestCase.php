@@ -15,8 +15,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
 	{
 		$loader = new \Nette\Loaders\RobotLoader;
 		$loader->addDirectory('tests');
-		$loader->addDirectory('libs/SocialBakers');
-		$loader->addDirectory('app');
 		$loader->setCacheStorage(new \Nette\Caching\Storages\FileStorage('temp'));
 		$loader->register();
 	}
