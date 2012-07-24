@@ -4,7 +4,9 @@
 	bootstrap="./tests/TestCase.php"
 	convertErrorsToExceptions="true"
 	convertNoticesToExceptions="true"
-	convertWarningsToExceptions="true">
+	convertWarningsToExceptions="true"
+	strict="true"
+	verbose="true">
 
 	<testsuites>
 		<testsuite name="Ukazkovy test">
