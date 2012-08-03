@@ -1,13 +1,10 @@
 {
     "name": "DeveloperHub/PHPTestCase",
-    "description": "PHPUnit testing tool for PHP. Support >= PHPUnit3.6 and SeleniumRC 2, Webdriver.",
+    "description": "PHPUnit testing tool for PHP",
     "authors": [
         {
-            "name": "Radim Daniel Panek",
-            "email": "rdpanek@gmail.com"
+            "name": "{ DeveloperHub",
+            "email": "rdpanek@developerhub.cz"
         }
-    ],
-    "require": {
-
-    }
+    ]
 }
