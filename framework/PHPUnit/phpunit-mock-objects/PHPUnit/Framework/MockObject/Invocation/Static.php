@@ -77,7 +77,8 @@ class PHPUnit_Framework_MockObject_Invocation_Static implements PHPUnit_Framewor
       'RecursiveIteratorIterator',
       'SplFileObject',
       'PDORow',
-      'ZipArchive'
+      'ZipArchive',
+      'MongoCursor'
     );
 
     /**
