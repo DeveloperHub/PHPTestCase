@@ -1,29 +1,15 @@
 <?php
-
-/*
- * Spoustec PHPTestCase
+/**
+ * PHPTestCase Runner
  *
- * php tests/run.php
+ * Run it as: php tests/run.php
+ *
  * @author RDPanek <rdpanek@developerhub.cz> { DeveloperHub
+ * @author wajrou <wajrou@gmail.com>
  */
 
-// cesta k PHPUnit Frameworku
-$dir = "./libs/PHPTestCase/framework/PHPUnit/";
+// PHPUnit Autoloader
+require __DIR__ . '/../libs/PHPTestCase/framework/PHPUnit/PHPUnit/PHPUnit/Autoload.php';
 
-// pridani trid PHPUnit do include path
-$paths = scandir( $dir );
-$includes = array();
-foreach($paths as $path)
-{
-    if ( !preg_match('/^\./', $path) )
-		{
-        $includes[] = $dir . $path . '/';
-    }
-}
-set_include_path(implode(PATH_SEPARATOR,$includes).PATH_SEPARATOR.get_include_path());
-
-// zavolani autoloader
-require $dir . 'PHPUnit/PHPUnit/Autoload.php';
-
-// spusteni
+// Run PHPUnit
 PHPUnit_TextUI_Command::main();
