@@ -8,7 +8,7 @@
  */
 
 // cesta k PHPUnit Frameworku
-$dir = "./libs/PHPTestCase/framework/PHPUnit/";
+$dir = "./libs/PHPTestCase/framework/phpunit/";
 
 // pridani trid PHPUnit do include path
 $paths = scandir( $dir );
@@ -23,7 +23,7 @@ foreach($paths as $path)
 set_include_path(implode(PATH_SEPARATOR,$includes).PATH_SEPARATOR.get_include_path());
 
 // zavolani autoloader
-require $dir . 'PHPUnit/PHPUnit/Autoload.php';
+require $dir . 'phpunit/PHPUnit/Autoload.php';
 
 // spusteni
 PHPUnit_TextUI_Command::main();

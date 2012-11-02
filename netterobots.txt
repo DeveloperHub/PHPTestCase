@@ -1,1 +1,15 @@
-Disallow: /skeleton
+Disallow: 
+/skeleton
+/framework/phpunit/php-code-coverage/Tests
+/framework/phpunit/php-timer/Tests
+/framework/phpunit/php-token-stream/Tests
+/framework/phpunit/phpunit/Tests
+/framework/phpunit/phpunit-mock-objects/Tests
+
+/framework/phpunit/php-code-coverage/build
+/framework/phpunit/php-file-iterator/build
+/framework/phpunit/php-text-template/build
+/framework/phpunit/php-timer/build
+/framework/phpunit/php-token-stream/build
+/framework/phpunit/phpunit/build
+/framework/phpunit/phpunit-mock-objects/build

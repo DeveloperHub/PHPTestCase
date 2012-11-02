@@ -1,10 +1,30 @@
 {
     "name": "DeveloperHub/PHPTestCase",
     "description": "PHPUnit testing tool for PHP",
+	"keywords": [
+		"phpunit", 
+		"test", 
+		"unit", 
+		"integrate", 
+		"selen",
+		"testcase", 
+		"testsuite"
+	],
     "authors": [
         {
             "name": "{ DeveloperHub",
             "email": "rdpanek@developerhub.cz"
         }
-    ]
+    ], 
+	"homepage": "http://www.developerhub.cz",
+	"support": {
+		"issues": "https://github.com/DeveloperHub/PHPTestCase/issues", 
+		"irc": "irc://irc.freenode.net/developerhub"
+	},
+	"require": {
+		"phpunit/phpunit": "3.7.x-dev"
+	},
+	"config": {
+		"vendor-dir": "framework"
+	}
 }
