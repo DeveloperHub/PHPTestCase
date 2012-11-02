@@ -1,0 +1,7 @@
+#phpunit dependency
+framework/phpunit/
+framework/bin/
+framework/composer/
+framework/symfony/
+framework/autoload.php
+composer.lock
